@@ -1,2 +1,2 @@
-const url = "localhost:8300";
+const url = "https://data.imceria.com";
 // Endpoint API
