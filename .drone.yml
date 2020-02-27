@@ -1,0 +1,57 @@
+---
+kind: pipeline
+type: docker
+name: master
+
+steps:
+  - name: deploy
+    image: drillster/drone-rsync
+    settings:
+      hosts:
+        - indiemarketfest.com
+      port: "169"
+      user: www-data
+      key:
+        from_secret: ssh_key
+      source: *
+      target: ~/new
+      script:
+        - NOW=$(date +%Y%m%d-%H%M%S)-${DRONE_COMMIT:0:8}
+        - mkdir -p /files/http/prod/web/ra-attendance && cd "$_"
+        - mv ~/new $NOW
+        - rm -f latest || true
+        - ln -s $NOW latest
+        - ls -t -I latest  | awk "NR>3" | xargs rm -rf
+
+trigger:
+  branch:
+    - master
+
+---
+kind: pipeline
+type: docker
+name: notification
+
+clone:
+  disable: true
+
+steps:
+  - name: slack
+    image: plugins/slack
+    settings:
+      webhook:
+        from_secret: slack_webhook
+      template: >
+        {{#success build.status}}
+          *SUCCESS* job <{{build.link}}|#{{build.number}}> *on* {{repo.name}} _({{build.branch}})_ by *{{build.author}}*.
+        {{else}}
+          *FAILED* job <{{build.link}}|#{{build.number}}> *on* {{repo.name}} _({{build.branch}})_ by *{{build.author}}*. Fix me please.
+        {{/success}}
+
+trigger:
+  branch:
+    - master
+    - development
+  status:
+  - success
+  - failure
