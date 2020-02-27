@@ -280,9 +280,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   $(document).ready(function() {
     $.getScript('./config.js', function() {
         console.log('Config');
-        let readData = "http://"+url+"/util/attendance/datatable";
-        let readData1 = "http://"+url+"/util/attendance";
-        let uploadData = "http://"+url+"/util/uploads/attendance";
+        let readData = url+"/util/attendance/datatable";
+        let readData1 = url+"/util/attendance";
+        let uploadData = url+"/util/uploads/attendance";
         const temp = $("#dformat").html();
         var dtable = $("#dtable1").DataTable({
           ajax:readData,
@@ -469,7 +469,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           name = $(this).val();
           if (triggerLoader(name,m,year)) {
             if (name != null && year != null && m != null) {
-              loadData("http://"+url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
+              loadData(url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
             }
           }
         });
@@ -480,7 +480,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           m = $(this).val();
           if (triggerLoader(name,m,year)) {
             if (name != null && year != null && m != null) {
-              loadData("http://"+url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
+              loadData(url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
             }
           }
         });
@@ -491,7 +491,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           year = $(this).val();
           if (triggerLoader(name,m,year)) {
             if (name != null && year != null && m != null) {
-              loadData("http://"+url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
+              loadData(url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
             }
           }
         });
