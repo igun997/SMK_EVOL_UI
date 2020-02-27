@@ -13,7 +13,7 @@ steps:
       user: www-data
       key:
         from_secret: ssh_key
-      source: *
+      source: .
       target: ~/new
       script:
         - NOW=$(date +%Y%m%d-%H%M%S)-${DRONE_COMMIT:0:8}
