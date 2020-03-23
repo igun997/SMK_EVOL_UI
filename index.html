@@ -55,10 +55,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="./" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+            <a href="" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
               <p>
                 Beranda
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#/monitor" class="nav-link">
+              <i class="nav-icon fa fa-spinner"></i>
+              <p>
+                Monitoring Apps
               </p>
             </a>
           </li>
@@ -70,147 +78,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Attendance Reader</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Attendance</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+  <div class="content-wrapper" id="app">
 
-    <!-- Main content -->
-    <div class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Read Attendance</h5>
-
-                <p class="card-text">
-                  <table class="table table-stripped" id="dtable1">
-                    <thead>
-                      <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Date</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Durations</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Date</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Durations</th>
-                      </tr>
-                  </tfoot>
-                  </table>
-                </p>
-              </div>
-            </div>
-
-          </div>
-          <!-- /.col-md-6 -->
-          <div class="col-lg-6">
-            <div class="card card-primary card-outline">
-              <div class="card-body">
-                <h5 class="card-title">Upload Attendance</h5>
-
-                <p class="card-text">
-                  <form class="" onsubmit="return false" action="" method="post" id="item" enctype="multipart/form-data">
-                    <div class="form-group">
-                      <label>File Excel (*xls)</label>
-                      <input type="file" class="form-control-file" name="doc" id="docChange" value="">
-                    </div>
-                  </form>
-                </p>
-
-              </div>
-            </div><!-- /.card -->
-
-          </div>
-          <!-- /.col-md-6 -->
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Read Attendance Format II</h5>
-                <div class="card-text">
-                  <div class="form-group">
-                    <label>Filter By Name</label>
-                    <select class="form-control" id="name">
-                      <option value="">-</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Filter By Month</label>
-                    <select class="form-control" id="month">
-                      <option value="">-</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Filter By Year</label>
-                    <select class="form-control" id="year">
-                      <option value="">-</option>
-                    </select>
-                  </div>
-                </div>
-                <p class="card-text">
-                  <table class="table table-bordered table-responsive" id="dformat">
-                    <thead>
-                      <tr id="loopCast">
-                        <th rowspan="2">No</th>
-                        <th rowspan="2">Nama</th>
-                        <th rowspan="2">Jabatan</th>
-                        <th rowspan="2">No Absen</th>
-                        <th rowspan="2">Tgl. Masuk</th>
-                      </tr>
-                      <tr id="rowIt">
-                      </tr>
-                    </thead >
-                    <tbody id="rowData">
-
-                    </tbody>
-                  </table>
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-    <div class="p-3">
-      <h5>Title</h5>
-      <p>Sidebar content</p>
-    </div>
-  </aside>
   <!-- /.control-sidebar -->
 
   <!-- Main Footer -->
@@ -229,6 +101,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
+<script src="dist/js/sammy.js"></script>
+<script src="plugins/sammy.plugin.js"></script>
 <!-- Bootstrap 4 -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -239,269 +113,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" charset="utf-8"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
-<script type="text/javascript">
-
-  function setColspan(obj,num=0) {
-    obj.attr("colspan",num);
-  }
-  function setCol(obj,data=[]) {
-    obj.html("");
-    for (var i = 0; i < data.length; i++) {
-        obj.append("<th>"+data[i]+"</th>");
-    }
-  }
-  function dayConvert(day) {
-    if (day == "Sunday") {
-      return "Minggu";
-    }else if (day == "Monday") {
-      return "Senin";
-    }else if (day == "Tuesday") {
-      return "Selasa";
-    }else if (day == "Wednesday") {
-      return "Rabu";
-    }else if (day == "Thursday") {
-      return "Kamis";
-    }else if (day == "Friday") {
-      return "Jumat";
-    }else if (day == "Saturday") {
-      return "Sabtu";
-    }else{
-      return "Not Found";
-    }
-  }
-  function con(timestamp) {
-
-    var hours = Math.floor(timestamp / 60 / 60);
-    var minutes = Math.floor(timestamp / 60) - (hours * 60);
-    var seconds = timestamp % 60;
-    var formatted = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
-    return formatted;
-  }
-  $(document).ready(function() {
-    $.getScript('./config.js', function() {
-        console.log('Config');
-        let readData = url+"/util/attendance/datatable";
-        let readData1 = url+"/util/attendance";
-        let uploadData = url+"/util/uploads/attendance";
-        const temp = $("#dformat").html();
-        var dtable = $("#dtable1").DataTable({
-          ajax:readData,
-          initComplete: function () {
-              var al = this.api().columns(1);
-              var el = this.api().columns(2);
-              var column = al;
-              var select = $('<select class="form-control"><option value=""></option></select>')
-                  .appendTo( $(column.footer()).empty() )
-                  .on( 'change', function () {
-                      var val = $.fn.dataTable.util.escapeRegex(
-                          $(this).val()
-                      );
-
-                      column
-                          .search( val ? '^'+val+'$' : '', true, false )
-                          .draw();
-                  } );
-
-              function onlyUnique(value, index, self) {
-                  return self.indexOf(value) === index;
-              }
-
-
-
-              column.data().unique().sort().each( function ( d, j ) {
-                var unique = d.filter( onlyUnique );
-                for (var i = 0; i < unique.length; i++) {
-                  select.append( '<option value="'+unique[i]+'">'+unique[i]+'</option>' );
-                  $("#name").append( '<option value="'+unique[i]+'">'+unique[i]+'</option>' );
-                }
-              });
-              var column = el;
-              var select = $('<select class="form-control"><option value=""></option></select>')
-                  .appendTo( $(column.footer()).empty() )
-                  .on( 'change', function () {
-                      var val = $.fn.dataTable.util.escapeRegex(
-                          $(this).val()
-                      );
-
-                      column
-                          .search( val ? '^'+val+'$' : '', true, false )
-                          .draw();
-                  } );
-              const max = 3;
-
-
-              function onlyUnique(value, index, self) {
-                  return self.indexOf(value) === index;
-              }
-
-
-
-              column.data().unique().sort().each( function ( d, j ) {
-                var unique = d.filter( onlyUnique );
-                for (var i = 0; i < unique.length; i++) {
-                  select.append( '<option value="'+unique[i]+'">'+unique[i]+'</option>' );
-                }
-              } );
-            }
-        });
-        // console.log(dtable);
-        $("#docChange").on("change", function(event) {
-          form = new FormData();
-          form.append("doc",$("#docChange")[0].files[0]);
-          $.ajax({
-            url: uploadData,
-            type: "POST",
-            data:  form,
-            contentType: false,
-            cache: false,
-            processData:false,
-            beforeSend : function()
-            {
-              toastr.info("Uploading . . .  ");
-            },
-            success: function(data)
-            {
-              if (data.code == 200) {
-                console.log("Reloading . . .");
-                toastr.success("Data Sudah Terupload ");
-                setTimeout(function () {
-                  location.reload();
-                }, 1000);
-              }else {
-                toastr.error("Data Gagal Di Upload");
-              }
-            },
-            error:function(d){
-              toastr.error("System Error");
-            }
-          });
-        })
-        function loadData(url = null) {
-          if (url != null) {
-            readData1 = url;
-          }
-          $.get(readData1,function(d){
-            if (d.code == 200) {
-              $("#dformat").html(temp);
-              toastr.info("Data Diperbarui");
-              numSpan = $("#colspan_num");
-              collAdd = $("#rowIt");
-              fixedRow = [];
-              console.log(d.data[0]);
-              f = [
-                "<th>IN</th>",
-                "<th>OUT</th>",
-                "<th style='background-color:#ffbe76;color:white'>JK</th>"
-              ];
-              x = 2;
-              for (var i = 0; i < d.data[0].attendance.length; i++) {
-                $("#rowIt").append(f[0]);
-                $("#rowIt").append(f[1]);
-                $("#rowIt").append(f[2]);
-              }
-              setTimeout(function () {
-                for (var i = 0; i < d.data[0].attendance.length; i++) {
-                  day = moment(d.data[0].attendance[i].period.year+"-"+d.data[0].attendance[i].period.month+"-"+d.data[0].attendance[i].period.date).format("dddd");
-                  // console.log(day);
-                  $("#loopCast").append("<th colspan='3' style='text-align:center' >"+d.data[0].attendance[i].period.date+" "+dayConvert(day)+"</th>");
-                }
-              }, 1000);
-
-
-              $.each(d.data,function(i,el) {
-                // console.log(el);
-                b = [
-                  "<tr>",
-                  "<td>"+(i+1)+"</td>",
-                  "<td>"+el.name+"</td>",
-                  "<td>-</td>",
-                  "<td>-</td>",
-                  "<td>-</td>",
-                ];
-                $.each(el.attendance, function(index, val) {
-                  if (val.start_time != null) {
-                    b.push("<td>"+(moment(val.start_time*1000).format("HH:mm:ss"))+"</td>");
-                    b.push("<td>"+(moment(val.end_time*1000).format("HH:mm:ss"))+"</td>");
-                    b.push("<td style='background-color:#ffbe76;color:white'>"+con(val.work_duration)+"</td>");
-                  }else{
-                    b.push("<td>-</td>");
-                    b.push("<td>-</td>");
-                    b.push("<td>-</td>");
-                  }
-
-                });
-                b.push("</tr>");
-                $("#rowData").append(b.join(""))
-              });
-
-
-            } else {
-              toastr.error("Data Tidak Ditemukan");
-              $("#dformat").html(temp);
-            }
-          })
-        }
-        loadData();
-        const month = ["-","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-        let as = new Date();
-        years = as.getFullYear();
-        for (var i = 1; i <= 12; i++) {
-          $("#month").append( '<option value="'+i+'">'+month[i]+'</option>' );
-          $("#year").append( '<option value="'+years+'">'+years+'</option>' );
-          years--;
-        }
-        let name = null;
-        let m = null;
-        let year = null;
-        function triggerLoader(name,m,year){
-          if ((m != null && year != null) || (name != null)) {
-
-
-            return true;
-          }else {
-            return false;
-          }
-        }
-        $("#name").on("change", function(event) {
-          if ($(this).val() == "") {
-            name = null;
-          }
-          name = $(this).val();
-          if (triggerLoader(name,m,year)) {
-            if (name != null && year != null && m != null) {
-              loadData(url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
-            }
-          }
-        });
-        $("#month").on("change", function(event) {
-          if ($(this).val() == "") {
-            m = null;
-          }
-          m = $(this).val();
-          if (triggerLoader(name,m,year)) {
-            if (name != null && year != null && m != null) {
-              loadData(url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
-            }
-          }
-        });
-        $("#year").on("change", function(event) {
-          if ($(this).val() == "") {
-            year = null;
-          }
-          year = $(this).val();
-          if (triggerLoader(name,m,year)) {
-            if (name != null && year != null && m != null) {
-              loadData(url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
-            }
-          }
-        });
-    }).fail(function(){
-      toastr.error("Warning Config File not found");
-    });
-
-
-  });
-
-</script>
+<script src="app.js" charset="utf-8"></script>
 </body>
 </html>
