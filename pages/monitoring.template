@@ -1,0 +1,120 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Monitoring Log </h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Monitoring</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card shadow mb-4">
+      		<div class="card-header py-3">
+      			<h6 class="m-0 font-weight-bold">Data Monitoring</h6>
+      		</div>
+      		<div class="card-body">
+      			<div class="float-right mb-2">
+      				<div class="row">
+      					<div class="form-group col-auto">
+      						<div class="input-group mb-2">
+      							<div class="input-group-prepend">
+      								<div class="input-group-text"><i class="fa fa-user"></i></div>
+      							</div>
+      							<select id="table-staff" class="form-control">
+      								<option disabled="" selected="">- Choose Staff -</option>
+
+      							</select>
+      						</div>
+      					</div>
+
+      					<div class="form-group col-auto">
+      						<div class="input-group mb-2">
+      							<div class="input-group-prepend">
+      								<div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+      							</div>
+      							<select id="table-month" class="form-control">
+      									<option value="1">January</option>
+      									<option value="2">February</option>
+      									<option value="3">March</option>
+      									<option value="4">April</option>
+      									<option value="5">May</option>
+      									<option value="6">June</option>
+      									<option value="7">July</option>
+      									<option value="8">August</option>
+      									<option value="9">September</option>
+      									<option value="10">October</option>
+      									<option value="11">November</option>
+      									<option value="12">Desember</option>
+      							</select>
+      						</div>
+      					</div>
+
+      					<div class="form-group col-auto">
+      						<div class="input-group mb-2">
+      							<div class="input-group-prepend">
+      								<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+      							</div>
+      							<select id="table-year" class="form-control">
+      								<option>2019</option>
+      								<option selected="">2020</option>
+      							</select>
+      						</div>
+      					</div>
+      				</div>
+      			</div>
+      			<div class="table-responsive">
+      				<table class="table table-bordered" width="100%" cellspacing="0">
+      					<thead>
+      						<tr>
+      							<th>Date</th>
+      							<th>List Apps</th>
+      							<th>Work Time</th>
+      							<th>Rest Time</th>
+      							<th>Is Over Rest </th>
+      						</tr>
+      					</thead>
+      					<tbody id="table-data">
+      						
+      					</tbody>
+      					<tfoot>
+      						<tr>
+      							<th>Date</th>
+      							<th>List Apps</th>
+      							<th>Work Time</th>
+      							<th>Rest Time</th>
+      							<th>Is Over Rest </th>
+      						</tr>
+      						<tr>
+      							<th colspan="5" class="text-center">
+      								<button type="button" id="viewMore" class="btn btn-lg btn-primary btn-block">More ...</button>
+      							</th>
+      						</tr>
+      					</tfoot>
+      				</table>
+      			</div>
+      			<div id="table-paging">
+
+      			</div>
+      		</div>
+      	</div>
+
+      </div>
+
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content -->
