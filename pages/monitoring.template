@@ -68,8 +68,8 @@
       								<div class="input-group-text"><i class="fa fa-calendar"></i></div>
       							</div>
       							<select id="table-year" class="form-control">
-      								<option>2019</option>
-      								<option selected="">2020</option>
+      								<option>2020</option>
+                      <option>2019</option>
       							</select>
       						</div>
       					</div>
@@ -87,7 +87,7 @@
       						</tr>
       					</thead>
       					<tbody id="table-data">
-      						
+
       					</tbody>
       					<tfoot>
       						<tr>
