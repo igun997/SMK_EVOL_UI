@@ -265,21 +265,210 @@
         toastr.error("Warning Config File not found");
       });
     });
-    this.get("#/monitor",function(c){
+    this.get("#/monitor",async function(c){
       c.app.swap('');
+
       c.render('pages/monitoring.template',{}).appendTo(c.$element());
-      setTimeout(function () {
-        $.getScript('./config.js',function(){
+      setTimeout(async function () {
+        $.getScript('./config.js',async function(){
           table_data = $("#table-data");
+          emp_data = $("#table-staff");
+          let emp = await $.get(url+"/util/ramonit/emp").then();
+          if (emp.code == 200) {
+            let tempData = [
+              "<option selected>- Choose Staff -</option>"
+            ];
+            $.each(emp.data, function(index, val) {
+              tempData.push("<option value='"+val.nik+"'>"+val.name+"");
+            });
+            emp_data.html(tempData.join(""));
+          }else {
+              toastr.error("Data Pegawai Tidak Ditemukan");
+          }
           const noData = [
               '<tr>',
               '<th colspan="5" class="text-center">No Data</th>',
               '</tr>',
           ];
           table_data.html(noData.join(""));
+
+          $('#table-month').change(function () {
+
+							const cstaff = $('#table-staff').val();
+							const cyear = $('#table-year').val();
+							const cmonth = $(this).val();
+              if (isNaN(parseInt(cstaff))) {
+                c.redirect("#/monitor");
+                return;
+              }
+							c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/3`);
+						});
+
+						$('#table-year').change(function () {
+
+							const cstaff = $('#table-staff').val();
+							const cmonth = $('#table-month').val();
+							const cyear = $(this).val();
+              if (isNaN(parseInt(cstaff))) {
+                c.redirect("#/monitor");
+                return;
+              }
+							c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/3`);
+						});
+
+						$('#table-staff').change(function () {
+
+							const cmonth = $('#table-month').val();
+							const cyear = $('#table-year').val();
+							const cstaff = $(this).val();
+              if (isNaN(parseInt(cstaff))) {
+                c.redirect("#/monitor");
+              }else {
+                c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/3`);
+              }
+						});
+
+
         }).fail(function(){
           toastr.error("Config Tidak Ditemukan");
         })
+      }, 1000);
+    });
+
+    this.get("#/monitor/:nik/:year/:month/:limit",async function(c){
+      c.app.swap('');
+      await $.getScript('./config.js');
+      const monthList = [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember",
+      ];
+
+      const pNik = c.params.nik;
+      const pYear = c.params.year;
+      const pMonth = c.params.month;
+      const pLimit = c.params.limit;
+
+      params = $.param({
+        month:pMonth,
+        year:pYear,
+        nik:pNik,
+        limit:pLimit,
+      });
+
+      const mData = await $.get(url+"/util/monitor/read?"+params).then();
+      console.log(mData);
+      c.render('pages/monitoring.template',{}).appendTo(c.$element());
+      setTimeout(async function () {
+
+          table_data = $("#table-data");
+          console.log(monthList[(pMonth-1)]);
+          emp_data = $("#table-staff");
+          $("#table-month").append("<option value='"+(pMonth)+"' selected>"+monthList[(pMonth-1)]+"</option>");
+          let entities = $("#table-year").find("option");
+          $("#table-year").html("");
+
+          $.each(entities,function(k,v){
+              yea = $(v).text().trim("");
+              if (yea != pYear) {
+                $("#table-year").append("<option>"+yea+"</option>");
+              }
+          });
+          $("#table-year").append("<option selected>"+pYear+"</option>");
+          let emp = await $.get(url+"/util/ramonit/emp").then();
+          if (emp.code == 200) {
+            let tempData = [
+              "<option selected>- Choose Staff -</option>"
+            ];
+            $.each(emp.data, function(index, val) {
+              if (val.nik == pNik) {
+                tempData.push("<option value='"+val.nik+"' selected>"+val.name+"");
+              }else {
+                tempData.push("<option value='"+val.nik+"'>"+val.name+"");
+              }
+            });
+            emp_data.html(tempData.join(""));
+          }else {
+              toastr.error("Data Pegawai Tidak Ditemukan");
+          }
+          const noData = [
+              '<tr>',
+              '<th colspan="5" class="text-center">No Data</th>',
+              '</tr>',
+          ];
+          table_data.html(noData.join(""));
+          if (mData.code == 200 && mData.data.length > 0) {
+            content = [];
+            $.each(mData.data, function(index, val) {
+              rest = [];
+              $.each(val.rest, function(i, v) {
+                rest.push("<p>"+v.formatted+"</p><p><b>"+v.formatted_duration+"</b></p><hr>");
+              });
+              temp = [
+                "<tr>",
+                "<td>"+val.formatted_date+"</td>",
+                "<td>-</td>",
+                "<td>"+([
+                  "<p>"+val.work_time+"</p>",
+                  "<p><b>"+val.work_time_duration+"</b></p>",
+                ]).join("")+"</td>",
+                "<td>"+rest.join("")+"</td>",
+                "<td>"+((val.is_over_rest)?"Yes":"No")+"</td>",
+                "</tr>",
+              ]
+              content.push(temp.join(""));
+            });
+            table_data.html(content.join(""));
+          }
+          $('#table-month').change(function () {
+
+							const cstaff = $('#table-staff').val();
+							const cyear = $('#table-year').val();
+							const cmonth = $(this).val();
+              if (isNaN(parseInt(cstaff))) {
+                c.redirect("#/monitor");
+                return;
+              }
+							c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/${pLimit}`);
+						});
+
+					$('#table-year').change(function () {
+
+						const cstaff = $('#table-staff').val();
+						let cmonth = $('#table-month').val();
+            if (cmonth <= 0) {
+              cmonth = 1;
+            }
+						const cyear = $(this).val();
+            if (isNaN(parseInt(cstaff))) {
+              c.redirect("#/monitor");
+              return;
+            }
+						c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/${pLimit}`);
+					});
+
+					$('#table-staff').change(function () {
+
+						const cmonth = $('#table-month').val();
+						const cyear = $('#table-year').val();
+						const cstaff = $(this).val();
+            if (isNaN(parseInt(cstaff))) {
+              c.redirect("#/monitor");
+            }else {
+              c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/${pLimit}`);
+            }
+					});
+
+
       }, 1000);
     });
 
