@@ -369,7 +369,7 @@
       console.log(mData);
       c.render('pages/monitoring.template',{}).appendTo(c.$element());
       setTimeout(async function () {
-
+          viewMore = $("#viewMore");
           table_data = $("#table-data");
           console.log(monthList[(pMonth-1)]);
           emp_data = $("#table-staff");
@@ -410,13 +410,55 @@
             content = [];
             $.each(mData.data, function(index, val) {
               rest = [];
+              appItem = [];
+
               $.each(val.rest, function(i, v) {
                 rest.push("<p>"+v.formatted+"</p><p><b>"+v.formatted_duration+"</b></p><hr>");
               });
+
+              $.each(val.data, function(i, v) {
+                if (i > 2) {
+                  appItem.push(([
+                    "<tr class='hideIt' style='display:none' data-id="+val._id+">",
+                    "<td>"+v.app+"</td>",
+                    "<td>"+v.waktu_formatted+"</td>",
+                    "</tr>",
+                  ]).join(""));
+                }else {
+
+                  appItem.push(([
+                    "<tr>",
+                    "<td>"+v.app+"</td>",
+                    "<td>"+v.waktu_formatted+"</td>",
+                    "</tr>",
+                  ]).join(""));
+                }
+
+              });
+
+              template = [
+                '<table class="table table-bordered">',
+                '<thead>',
+                '<tr>',
+                '<th>Apps</th>',
+                '<th>Waktu Pakai</th>',
+                '</tr>',
+                '</thead>',
+                '<tbody>',
+                appItem.join(""),
+                '<tr>',
+                '<th colspan="2" class="text-center">',
+                '<button type="button" class="btn btn-sm btn-primary btn-block view_more" data-id="'+val._id+'" class="btn btn-sm btn-primary btn-block">More ...</button>',
+                '</th>',
+                '</tr>',
+                '</tbody>',
+                '</table>',
+              ];
+
               temp = [
                 "<tr>",
                 "<td>"+val.formatted_date+"</td>",
-                "<td>-</td>",
+                "<td>"+template.join("")+"</td>",
                 "<td>"+([
                   "<p>"+val.work_time+"</p>",
                   "<p><b>"+val.work_time_duration+"</b></p>",
@@ -428,6 +470,28 @@
               content.push(temp.join(""));
             });
             table_data.html(content.join(""));
+            ea = 1;
+            $(".view_more").on("click",function(event) {
+              id = $(this).data("id");
+              console.log(id);
+              if (ea % 2 != 0) {
+                $.each($(".hideIt"),(r,d)=>{
+                  if ($(d).data("id") == id) {
+                    $(d).removeAttr("style");
+                  }
+                })
+                $(this).html("Less");
+              }else{
+                $.each($(".hideIt"),(r,d)=>{
+                  if ($(d).data("id") == id) {
+                    $(d).attr("style","display:none");
+                  }
+                })
+                $(this).html("More ...");
+              }
+              ea++;
+
+            })
           }
           $('#table-month').change(function () {
 
@@ -467,6 +531,30 @@
               c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/${pLimit}`);
             }
 					});
+
+          emore = 1;
+          if (pLimit == 999) {
+            viewMore.html("Less ...");
+          }else {
+            viewMore.html("More ...");
+          }
+          viewMore.on("click",function(){
+            if (emore % 2 == 0) {
+              myLimit = 999;
+            }else {
+              myLimit = 3;
+            }
+            emore++;
+
+            const cmonth = $('#table-month').val();
+            const cyear = $('#table-year').val();
+            const cstaff = $('#table-staff').val();
+            if (isNaN(parseInt(cstaff))) {
+              c.redirect("#/monitor");
+            }else {
+              c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/${myLimit}`);
+            }
+          });
 
 
       }, 1000);
