@@ -59,14 +59,48 @@
     for (var i = 0; i < d.length; i++) {
       let name = 'jawaban['+d[i].id+']';
       if (d[i].tipe === "pg") {
-        pg_a = d[i].pg_a;
-        pg_b = d[i].pg_b;
-        pg_c = d[i].pg_c;
-        pg_d = d[i].pg_d;
-        pg_e = d[i].pg_e;
-        temp = '<div class="card" style="padding:5px 5px 5px"><p>'+d[i].soal+'</p><label class="label-radio item-content"><input type="radio" name="'+name+'" value="A"><div class="item-inner"><div class="item-title">A. '+pg_a+'</div></div></label><label class="label-radio item-content"><input type="radio" name="'+name+'" value="B"><div class="item-inner"><div class="item-title">B. '+pg_b+'</div></div></label><label class="label-radio item-content"><input type="radio" name="'+name+'" value="C"><div class="item-inner"><div class="item-title">C. '+pg_c+'</div></div></label><label class="label-radio item-content"><input type="radio" name="'+name+'" value="D"><div class="item-inner"><div class="item-title">D. '+pg_d+'</div></div></label><label class="label-radio item-content"><input type="radio" name="'+name+'" value="E"><div class="item-inner"><div class="item-title">E. '+pg_e+'</div></div></label></div>';
+        pg_a = "<div class='text ml-3'>"+d[i].pg_a+"</div>";
+        pg_b = "<div class='text ml-3'>"+d[i].pg_b+"</div>";
+        pg_c = "<div class='text ml-3'>"+d[i].pg_c+"</div>";
+        pg_d = "<div class='text ml-3'>"+d[i].pg_d+"</div>";
+        pg_e = "<div class='text ml-3'>"+d[i].pg_e+"</div>";
+        temp = '<div class="card m-2"><div class="m-4">'+d[i].soal+'</div></div>';
+        let abc = [
+          '<div class="funkyradio-primary">',
+          '<input  type="radio" id="a'+d[i].id+'" value="A" name="'+name+'">',
+          '<label for="a'+d[i].id+'">'+pg_a+'</label>',
+          '</div>',
+          '<div class="funkyradio-primary">',
+          '<input id="b'+d[i].id+'" type="radio" value="B" name="'+name+'">',
+          '<label for="b'+d[i].id+'">'+pg_b+'</label>',
+          '</div>',
+          '<div class="funkyradio-primary">',
+          '<input id="c'+d[i].id+'" type="radio" value="C" name="'+name+'">',
+          '<label  for="c'+d[i].id+'">'+pg_c+'</label>',
+          '</div>',
+          '<div class="funkyradio-primary">',
+          '<input id="d'+d[i].id+'" type="radio" value="D" name="'+name+'">',
+          '<label for="d'+d[i].id+'">  '+pg_d+'</label>',
+          '</div>',
+          '<div class="funkyradio-primary">',
+          '<input id="e'+d[i].id+'" type="radio" value="E" name="'+name+'">',
+          '<label  for="e'+d[i].id+'"> '+pg_e+'</label>',
+          '</div>',
+        ];
+        temp += '<div class="card m-2"><div class="m-4">'+abc.join("")+'</div></div>';
+        build = [
+            "<div class='row'>",
+            "<div class='col-md-12 funkyradio'>",
+            temp,
+            "</div>",
+            "<div class='col-md-12'>",
+            "<button class='btn btn-large btn-success btn-flat btn-block'>SIMPAN</button>",
+            "</div>",
+            "</div>",
+        ];
+        temp = build.join("");
       }else {
-        temp = '<div class="card" style="padding:5px 5px 5px"><p>'+d[i].soal+'</p><textarea name="'+name+'" class="form_textarea" rows="" cols=""></textarea></div>';
+        temp = '<div class="card m-2">'+d[i].soal+'<div>';
       }
       html.push(temp);
     }
@@ -182,12 +216,39 @@
                 setTimeout(function () {
                   $("#pin_accord").hide().fadeOut().animate();
                   let form = [
-                      "<form action='' method='post' onsubmit='return false'>",
+                      "<form action='' id='ujiandetail_savepoint' method='post' onsubmit='return false'>",
                       butir(item.soal),
                       "</form>",
                   ];
                   $("#ujiandetail_space").html(form.join(""));
                   $("#ujiandetail_space").show().fadeIn().animate();
+
+                  $("#ujiandetail_savepoint").on("submit",function () {
+                    dform = $(this).serializeArray();
+                    dform[dform.length] = {name:"ujian_id",value:id_ujian};
+                    dform[dform.length] = {name:"nis_siswa",value:(JSON.parse(localStorage.getItem("info"))).nis};
+                    console.log(dform);
+                    pathing = url+"api/jawaban";
+                    console.log(pathing);
+                    let c = confirm("Yakin Gak ? ");
+                    if (c){
+                      c = confirm("Coba Cek Lagi Ada Yang Kelewat Tidak ? ");
+                      if (c){
+                        $.post(url+"api/jawaban/",dform,function (r) {
+                          if (r.status == 1){
+                            toastr.error("Sukses Simpan Ujian, Anda Akan di alihkan");
+                            setTimeout(function () {
+                              location.href="#/ujian";
+                            },1000);
+                          }else{
+                            toastr.error("Gagal Simpan Ujian");
+                          }
+                        }).fail(function () {
+                            toastr.error("Terputus Dari Server");
+                        });
+                      }
+                    }
+                  });
                 },500);
               }else {
                 toastr.warning("Maaf PIN Salah");
