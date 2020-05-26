@@ -36,528 +36,187 @@
     var formatted = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
     return formatted;
   }
+  function isLogin(){
+    let status = localStorage.getItem("is_login");
+    return status;
+  }
+  function setMenu(link,name,icon){
+    let boiler = [
+        '<li class="nav-item">',
+        '<a href="'+link+'" class="nav-link">',
+        '<i class="nav-icon fa '+icon+'"></i>',
+        '<p>',
+        name,
+        '</p>',
+        '</a>',
+        '</li>'
+    ];
+    return boiler;
+  }
+
+  const loginMenus = [
+    {
+      "name":"Beranda",
+      "link":"#/",
+      "icon":"fa-home"
+    },
+    {
+      "name":"Ujian",
+      "link":"#/ujian",
+      "icon":"fa-table"
+    },
+    {
+      "name":"Logout",
+      "link":"#/logout",
+      "icon":"fa-sign-out-alt"
+    }
+  ];
+
+  const logoutMenus = [
+    {
+      "name":"Beranda",
+      "link":"#/",
+      "icon":"fa-home"
+    },{
+      "name":"Login",
+      "link":"#/login",
+      "icon":"fa-sign-in-alt"
+    },
+  ];
+
+  function menuRoll(){
+    $("#list_menus").html("");
+    if (isLogin() == 1){
+      loginMenus.forEach((i,key)=>{
+        const menu = setMenu(i.link,i.name,i.icon);
+        $("#list_menus").append(menu.join(""));
+      });
+    }else{
+      logoutMenus.forEach((i,key)=>{
+        const menu = setMenu(i.link,i.name,i.icon);
+        $("#list_menus").append(menu.join(""));
+      });
+    }
+  }
+
+  // localStorage.clear();
+  // localStorage.setItem("is_login",0);
   var app = $.sammy('#app',function() {
     this.use('Template');
 
     this.get("/", function(context) {
       context.app.swap('');
-      h = context.render("pages/main.template",{}).appendTo(context.$element());
+      h = context.render("pages/main.html",{}).appendTo(context.$element());
       $.getScript('./config.js', function() {
           setTimeout(function () {
-            console.log('Config');
-            let readData = url+"/util/attendance/datatable";
-            let readData1 = url+"/util/attendance";
-            let uploadData = url+"/util/uploads/attendance";
-            const temp = $("#dformat").html();
-            var dtable = $("#dtable1").DataTable({
-              ajax:readData,
-              initComplete: function () {
-                  var al = this.api().columns(1);
-                  var el = this.api().columns(2);
-                  var column = al;
-                  var select = $('<select class="form-control"><option value=""></option></select>')
-                      .appendTo( $(column.footer()).empty() )
-                      .on( 'change', function () {
-                          var val = $.fn.dataTable.util.escapeRegex(
-                              $(this).val()
-                          );
+            menuRoll();
 
-                          column
-                              .search( val ? '^'+val+'$' : '', true, false )
-                              .draw();
-                      } );
-
-                  function onlyUnique(value, index, self) {
-                      return self.indexOf(value) === index;
-                  }
-
-
-
-                  column.data().unique().sort().each( function ( d, j ) {
-                    var unique = d.filter( onlyUnique );
-                    for (var i = 0; i < unique.length; i++) {
-                      select.append( '<option value="'+unique[i]+'">'+unique[i]+'</option>' );
-                      $("#name").append( '<option value="'+unique[i]+'">'+unique[i]+'</option>' );
-                    }
-                  });
-                  var column = el;
-                  var select = $('<select class="form-control"><option value=""></option></select>')
-                      .appendTo( $(column.footer()).empty() )
-                      .on( 'change', function () {
-                          var val = $.fn.dataTable.util.escapeRegex(
-                              $(this).val()
-                          );
-
-                          column
-                              .search( val ? '^'+val+'$' : '', true, false )
-                              .draw();
-                      } );
-                  const max = 3;
-
-
-                  function onlyUnique(value, index, self) {
-                      return self.indexOf(value) === index;
-                  }
-
-
-
-                  column.data().unique().sort().each( function ( d, j ) {
-                    var unique = d.filter( onlyUnique );
-                    for (var i = 0; i < unique.length; i++) {
-                      select.append( '<option value="'+unique[i]+'">'+unique[i]+'</option>' );
-                    }
-                  } );
-                }
-            });
-            // console.log(dtable);
-            $("#docChange").on("change", function(event) {
-              form = new FormData();
-              form.append("doc",$("#docChange")[0].files[0]);
-              $.ajax({
-                url: uploadData,
-                type: "POST",
-                data:  form,
-                contentType: false,
-                cache: false,
-                processData:false,
-                beforeSend : function()
-                {
-                  toastr.info("Uploading . . .  ");
-                },
-                success: function(data)
-                {
-                  if (data.code == 200) {
-                    console.log("Reloading . . .");
-                    toastr.success("Data Sudah Terupload ");
-                    setTimeout(function () {
-                      location.reload();
-                    }, 1000);
-                  }else {
-                    toastr.error("Data Gagal Di Upload");
-                  }
-                },
-                error:function(d){
-                  toastr.error("System Error");
-                }
-              });
-            })
-            function loadData(url = null) {
-              if (url != null) {
-                readData1 = url;
-              }
-              $.get(readData1,function(d){
-                if (d.code == 200) {
-                  $("#dformat").html(temp);
-                  toastr.info("Data Diperbarui");
-                  numSpan = $("#colspan_num");
-                  collAdd = $("#rowIt");
-                  fixedRow = [];
-                  console.log(d.data[0]);
-                  f = [
-                    "<th>IN</th>",
-                    "<th>OUT</th>",
-                    "<th style='background-color:#ffbe76;color:white'>JK</th>"
-                  ];
-                  x = 2;
-                  for (var i = 0; i < d.data[0].attendance.length; i++) {
-                    $("#rowIt").append(f[0]);
-                    $("#rowIt").append(f[1]);
-                    $("#rowIt").append(f[2]);
-                  }
-                  setTimeout(function () {
-                    for (var i = 0; i < d.data[0].attendance.length; i++) {
-                      day = moment(d.data[0].attendance[i].period.year+"-"+d.data[0].attendance[i].period.month+"-"+d.data[0].attendance[i].period.date).format("dddd");
-                      // console.log(day);
-                      $("#loopCast").append("<th colspan='3' style='text-align:center' >"+d.data[0].attendance[i].period.date+" "+dayConvert(day)+"</th>");
-                    }
-                  }, 1000);
-
-
-                  $.each(d.data,function(i,el) {
-                    // console.log(el);
-                    b = [
-                      "<tr>",
-                      "<td>"+(i+1)+"</td>",
-                      "<td>"+el.name+"</td>",
-                      "<td>-</td>",
-                      "<td>-</td>",
-                      "<td>-</td>",
-                    ];
-                    $.each(el.attendance, function(index, val) {
-                      if (val.start_time != null) {
-                        b.push("<td>"+(moment(val.start_time*1000).format("HH:mm:ss"))+"</td>");
-                        b.push("<td>"+(moment(val.end_time*1000).format("HH:mm:ss"))+"</td>");
-                        b.push("<td style='background-color:#ffbe76;color:white'>"+con(val.work_duration)+"</td>");
-                      }else{
-                        b.push("<td>-</td>");
-                        b.push("<td>-</td>");
-                        b.push("<td>-</td>");
-                      }
-
-                    });
-                    b.push("</tr>");
-                    $("#rowData").append(b.join(""))
-                  });
-
-
-                } else {
-                  toastr.error("Data Tidak Ditemukan");
-                  $("#dformat").html(temp);
-                }
-              })
-            }
-            loadData();
-            const month = ["-","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-            let as = new Date();
-            years = as.getFullYear();
-            for (var i = 1; i <= 12; i++) {
-              $("#month").append( '<option value="'+i+'">'+month[i]+'</option>' );
-              $("#year").append( '<option value="'+years+'">'+years+'</option>' );
-              years--;
-            }
-            let name = null;
-            let m = null;
-            let year = null;
-            function triggerLoader(name,m,year){
-              if ((m != null && year != null) || (name != null)) {
-
-
-                return true;
-              }else {
-                return false;
-              }
-            }
-            $("#name").on("change", function(event) {
-              if ($(this).val() == "") {
-                name = null;
-              }
-              name = $(this).val();
-              if (triggerLoader(name,m,year)) {
-                if (name != null && year != null && m != null) {
-                  loadData(url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
-                }
-              }
-            });
-            $("#month").on("change", function(event) {
-              if ($(this).val() == "") {
-                m = null;
-              }
-              m = $(this).val();
-              if (triggerLoader(name,m,year)) {
-                if (name != null && year != null && m != null) {
-                  loadData(url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
-                }
-              }
-            });
-            $("#year").on("change", function(event) {
-              if ($(this).val() == "") {
-                year = null;
-              }
-              year = $(this).val();
-              if (triggerLoader(name,m,year)) {
-                if (name != null && year != null && m != null) {
-                  loadData(url+"/util/attendance?name="+name+"&month="+m+"&year="+year);
-                }
-              }
-            });
           }, 1000);
       }).fail(function(){
         toastr.error("Warning Config File not found");
       });
     });
-    this.get("#/monitor",async function(c){
-      c.app.swap('');
 
-      c.render('pages/monitoring.template',{}).appendTo(c.$element());
-      setTimeout(async function () {
-        $.getScript('./config.js',async function(){
-          table_data = $("#table-data");
-          emp_data = $("#table-staff");
-          let emp = await $.get(url+"/util/ramonit/emp").then();
-          if (emp.code == 200) {
-            let tempData = [
-              "<option selected>- Choose Staff -</option>"
-            ];
-            $.each(emp.data, function(index, val) {
-              tempData.push("<option value='"+val.nik+"'>"+val.name+"");
-            });
-            emp_data.html(tempData.join(""));
-          }else {
-              toastr.error("Data Pegawai Tidak Ditemukan");
-          }
-          const noData = [
-              '<tr>',
-              '<th colspan="5" class="text-center">No Data</th>',
-              '</tr>',
-          ];
-          table_data.html(noData.join(""));
+    this.get("/#/logout", function(context) {
+      context.app.swap('');
+      h = context.render("pages/main.html",{}).appendTo(context.$element());
+      $.getScript('./config.js', function() {
+        setTimeout(function () {
+          localStorage.clear();
+          localStorage.setItem("is_login",0);
+          menuRoll();
 
-          $('#table-month').change(function () {
-
-							const cstaff = $('#table-staff').val();
-							const cyear = $('#table-year').val();
-							const cmonth = $(this).val();
-              if (isNaN(parseInt(cstaff))) {
-                c.redirect("#/monitor");
-                return;
-              }
-							c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/3`);
-						});
-
-						$('#table-year').change(function () {
-
-							const cstaff = $('#table-staff').val();
-							const cmonth = $('#table-month').val();
-							const cyear = $(this).val();
-              if (isNaN(parseInt(cstaff))) {
-                c.redirect("#/monitor");
-                return;
-              }
-							c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/3`);
-						});
-
-						$('#table-staff').change(function () {
-
-							const cmonth = $('#table-month').val();
-							const cyear = $('#table-year').val();
-							const cstaff = $(this).val();
-              if (isNaN(parseInt(cstaff))) {
-                c.redirect("#/monitor");
-              }else {
-                c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/3`);
-              }
-						});
-
-
-        }).fail(function(){
-          toastr.error("Config Tidak Ditemukan");
-        })
-      }, 1000);
+        }, 1000);
+      }).fail(function(){
+        toastr.error("Warning Config File not found");
+      });
     });
 
-    this.get("#/monitor/:nik/:year/:month/:limit",async function(c){
-      c.app.swap('');
-      await $.getScript('./config.js');
-      const monthList = [
-        "Januari",
-        "Februari",
-        "Maret",
-        "April",
-        "Mei",
-        "Juni",
-        "Juli",
-        "Agustus",
-        "September",
-        "Oktober",
-        "November",
-        "Desember",
-      ];
-
-      const pNik = c.params.nik;
-      const pYear = c.params.year;
-      const pMonth = c.params.month;
-      const pLimit = c.params.limit;
-
-      params = $.param({
-        month:pMonth,
-        year:pYear,
-        nik:pNik,
-        limit:pLimit,
-      });
-
-      const mData = await $.get(url+"/util/monitor/read?"+params).then();
-      console.log(mData);
-      c.render('pages/monitoring.template',{}).appendTo(c.$element());
-      setTimeout(async function () {
-          viewMore = $("#viewMore");
-          table_data = $("#table-data");
-          console.log(monthList[(pMonth-1)]);
-          emp_data = $("#table-staff");
-          $("#table-month").append("<option value='"+(pMonth)+"' selected>"+monthList[(pMonth-1)]+"</option>");
-          let entities = $("#table-year").find("option");
-          $("#table-year").html("");
-
-          $.each(entities,function(k,v){
-              yea = $(v).text().trim("");
-              if (yea != pYear) {
-                $("#table-year").append("<option>"+yea+"</option>");
-              }
-          });
-          $("#table-year").append("<option selected>"+pYear+"</option>");
-          let emp = await $.get(url+"/util/ramonit/emp").then();
-          if (emp.code == 200) {
-            let tempData = [
-              "<option selected>- Choose Staff -</option>"
-            ];
-            $.each(emp.data, function(index, val) {
-              if (val.nik == pNik) {
-                tempData.push("<option value='"+val.nik+"' selected>"+val.name+"");
-              }else {
-                tempData.push("<option value='"+val.nik+"'>"+val.name+"");
-              }
-            });
-            emp_data.html(tempData.join(""));
-          }else {
-              toastr.error("Data Pegawai Tidak Ditemukan");
-          }
-          const noData = [
-              '<tr>',
-              '<th colspan="5" class="text-center">No Data</th>',
-              '</tr>',
-          ];
-          table_data.html(noData.join(""));
-          if (mData.code == 200 && mData.data.length > 0) {
-            content = [];
-            $.each(mData.data, function(index, val) {
-              rest = [];
-              appItem = [];
-
-              $.each(val.rest, function(i, v) {
-                rest.push("<p>"+v.formatted+"</p><p><b>"+v.formatted_duration+"</b></p><hr>");
-              });
-
-              $.each(val.data, function(i, v) {
-                if (i > 2) {
-                  appItem.push(([
-                    "<tr class='hideIt' style='display:none' data-id="+val._id+">",
-                    "<td>"+v.app+"</td>",
-                    "<td>"+v.waktu_formatted+"</td>",
-                    "</tr>",
-                  ]).join(""));
-                }else {
-
-                  appItem.push(([
-                    "<tr>",
-                    "<td>"+v.app+"</td>",
-                    "<td>"+v.waktu_formatted+"</td>",
-                    "</tr>",
-                  ]).join(""));
-                }
-
-              });
-
-              template = [
-                '<table class="table table-bordered">',
-                '<thead>',
-                '<tr>',
-                '<th>Apps</th>',
-                '<th>Waktu Pakai</th>',
-                '</tr>',
-                '</thead>',
-                '<tbody>',
-                appItem.join(""),
-                '<tr>',
-                '<th colspan="2" class="text-center">',
-                '<button type="button" class="btn btn-sm btn-primary btn-block view_more" data-id="'+val._id+'" class="btn btn-sm btn-primary btn-block">More ...</button>',
-                '</th>',
-                '</tr>',
-                '</tbody>',
-                '</table>',
-              ];
-
-              temp = [
+    this.get("/#/ujian", function(context) {
+      context.app.swap('');
+      h = context.render("pages/ujian.html",{}).appendTo(context.$element());
+      $.getScript('./config.js', function() {
+        setTimeout(function () {
+          const table = $("#ujian_konten");
+          const info = JSON.parse(localStorage.getItem("info"));
+          $.get(url+"api/listujian/"+info.nis+"?nis="+info.nis+"&password="+info.password,function (r) {
+            if (r.data.length > 0){
+              table.html("");
+            }
+            r.data.forEach((i,k)=>{
+              let btn = $(i[5]).data("id");
+              btn = "<button class='btn btn-primary unduh' data-id='"+btn+"'>Unduh</button>";
+              table.append(([
                 "<tr>",
-                "<td>"+val.formatted_date+"</td>",
-                "<td>"+template.join("")+"</td>",
-                "<td>"+([
-                  "<p>"+val.work_time+"</p>",
-                  "<p><b>"+val.work_time_duration+"</b></p>",
-                ]).join("")+"</td>",
-                "<td>"+rest.join("")+"</td>",
-                "<td>"+((val.is_over_rest)?"Yes":"No")+"</td>",
+                "<td>"+i[0]+"</td>",
+                "<td>"+i[1]+"</td>",
+                "<td>"+i[2]+"</td>",
+                "<td>"+i[3]+"</td>",
+                "<td>"+i[4]+"</td>",
+                "<td>"+btn+"</td>",
                 "</tr>",
-              ]
-              content.push(temp.join(""));
+              ]).join(""));
             });
-            table_data.html(content.join(""));
-            ea = 1;
-            $(".view_more").on("click",function(event) {
-              id = $(this).data("id");
-              console.log(id);
-              if (ea % 2 != 0) {
-                $.each($(".hideIt"),(r,d)=>{
-                  if ($(d).data("id") == id) {
-                    $(d).removeAttr("style");
-                  }
-                })
-                $(this).html("Less");
-              }else{
-                $.each($(".hideIt"),(r,d)=>{
-                  if ($(d).data("id") == id) {
-                    $(d).attr("style","display:none");
-                  }
-                })
-                $(this).html("More ...");
-              }
-              ea++;
-
-            })
-          }
-          $('#table-month').change(function () {
-
-							const cstaff = $('#table-staff').val();
-							const cyear = $('#table-year').val();
-							const cmonth = $(this).val();
-              if (isNaN(parseInt(cstaff))) {
-                c.redirect("#/monitor");
-                return;
-              }
-							c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/${pLimit}`);
-						});
-
-					$('#table-year').change(function () {
-
-						const cstaff = $('#table-staff').val();
-						let cmonth = $('#table-month').val();
-            if (cmonth <= 0) {
-              cmonth = 1;
-            }
-						const cyear = $(this).val();
-            if (isNaN(parseInt(cstaff))) {
-              c.redirect("#/monitor");
-              return;
-            }
-						c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/${pLimit}`);
-					});
-
-					$('#table-staff').change(function () {
-
-						const cmonth = $('#table-month').val();
-						const cyear = $('#table-year').val();
-						const cstaff = $(this).val();
-            if (isNaN(parseInt(cstaff))) {
-              c.redirect("#/monitor");
-            }else {
-              c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/${pLimit}`);
-            }
-					});
-
-          emore = 1;
-          if (pLimit == 999) {
-            viewMore.html("Less ...");
-          }else {
-            viewMore.html("More ...");
-          }
-          viewMore.on("click",function(){
-            if (emore % 2 == 0) {
-              myLimit = 999;
-            }else {
-              myLimit = 3;
-            }
-            emore++;
-
-            const cmonth = $('#table-month').val();
-            const cyear = $('#table-year').val();
-            const cstaff = $('#table-staff').val();
-            if (isNaN(parseInt(cstaff))) {
-              c.redirect("#/monitor");
-            }else {
-              c.redirect(`#/monitor/${cstaff}/${cyear}/${cmonth}/${myLimit}`);
-            }
           });
+          menuRoll();
+          $("#ujian_reload").on("click",function () {
+            toastr.info("Perbarui . . .")
+            $.get(url+"api/listujian/"+info.nis+"?nis="+info.nis+"&password="+info.password,function (r) {
+              if (r.data.length > 0){
+                table.html("");
+              }
+              r.data.forEach((i,k)=>{
+                let btn = $(i[5]).data("id");
+                table.append(([
+                  "<tr>",
+                  "<td>"+i[0]+"</td>",
+                  "<td>"+i[1]+"</td>",
+                  "<td>"+i[2]+"</td>",
+                  "<td>"+i[3]+"</td>",
+                  "<td>"+i[4]+"</td>",
+                  "<td>"+btn+"</td>",
+                  "</tr>",
+                ]).join(""));
+              });
+            });
+          })
+        }, 1000);
+      }).fail(function(){
+        toastr.error("Warning Config File not found");
+      });
+    });
 
-
-      }, 1000);
+    this.get("#/login", function(context) {
+      context.app.swap('');
+      h = context.render("pages/login.html",{}).appendTo(context.$element());
+      $.getScript('./config.js', function() {
+        setTimeout(function () {
+          menuRoll();
+          console.log("Menu");
+          $("#login").on("submit",function () {
+            let form = $(this).serialize();
+            $.get(url+"api/login?"+form,function (r) {
+              if(r.status == 1){
+                toastr.success("Tunggu Kamu Akan Di Alihkan");
+                localStorage.setItem("is_login",1);
+                localStorage.setItem("info",JSON.stringify(r.data));
+                setTimeout(function () {
+                  location.href="#/";
+                },1000);
+              }else{
+                toastr.error("Username & Password Salah !");
+                $("#login")[0].reset();
+              }
+            }).fail(function (r) {
+              toastr.error("Terputus Dari Server");
+            });
+            console.log(url);
+            console.log(form);
+          })
+        }, 1000);
+      }).fail(function(){
+        toastr.error("Warning Config File not found");
+      });
     });
 
 

@@ -1,3 +1,2 @@
-const url = "https://data.imceria.com";
-// const url = "http://localhost:8300";
+var url = "https://learning.smkkesehatanrajawali.sch.id/";
 // Endpoint API
