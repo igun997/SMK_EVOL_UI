@@ -255,7 +255,8 @@
                             const end = new Date(item.ditutup).getTime();
                             const start = new Date(item.buka).getTime();
                             const now = new Date().getTime();
-                            if (start >= now && now < end) {
+                            console.log(now >= start);
+                            if (now >= start && now < end) {
                                 if (own == pin) {
                                     toastr.success("PIN Benar , Tunggu Anda Akan di Alihkan");
                                     setTimeout(function () {
@@ -359,6 +360,13 @@
                             }
                             r.data.forEach((i, k) => {
                                 let btn = $(i[5]).data("id");
+                                if (i[4] == "Sudah") {
+
+                                    btn = "<button class='btn btn-primary ' disabled data-id='" + btn + "'>Kerjakan</button>";
+                                } else {
+                                    btn = "<button class='btn btn-primary unduh'  data-id='" + btn + "'>Kerjakan</button>";
+
+                                }
                                 table.append(([
                                     "<tr>",
                                     "<td>" + i[0] + "</td>",
@@ -370,6 +378,16 @@
                                     "</tr>",
                                 ]).join(""));
                             });
+
+                            table.on("click", ".unduh", function () {
+                                console.log("Unduh");
+                                toastr.success("Tunggu anda akan di alihkan ");
+                                let id = $(this).data("id");
+                                setTimeout(function () {
+                                    console.log(id)
+                                    location.href = "#/ujian/" + id;
+                                }, 1000);
+                            })
                         });
                     })
 
