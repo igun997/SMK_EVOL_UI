@@ -148,7 +148,10 @@
             "icon": "fa-sign-in-alt"
         },
     ];
-
+    function displayInfo() {
+        const info = JSON.parse(localStorage.getItem("info"));
+        $("#myname").html(info.nama+" - "+info.nis);
+    }
     function menuRoll() {
         $("#list_menus").html("");
         if (isLogin() == 1) {
@@ -156,6 +159,7 @@
                 const menu = setMenu(i.link, i.name, i.icon);
                 $("#list_menus").append(menu.join(""));
             });
+            displayInfo();
         } else {
             logoutMenus.forEach((i, key) => {
                 const menu = setMenu(i.link, i.name, i.icon);
