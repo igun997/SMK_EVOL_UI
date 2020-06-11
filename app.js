@@ -361,7 +361,7 @@
                             let id = $(this).data("id");
                             setTimeout(function () {
                                 console.log(id)
-                                location.href = url + "api/download_jawaban/" + info.nis + "?nis=" + info.nis + "&password=" + info.password;
+                                location.href = url + "api/download_jawaban/" + info.nis + "/nis/"+id+"?nis=" + info.nis + "&password=" + info.password;
                             }, 1000);
                         })
                     });
