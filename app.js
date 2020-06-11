@@ -330,6 +330,7 @@
                             if (i[4] == "Sudah") {
 
                                 btn = "<button class='btn btn-primary ' disabled data-id='" + btn + "'>Kerjakan</button>";
+                                btn += "<button class='btn btn-primary unduh_jawaban' data-id='" + btn + "'>Unduh Jawaban</button>";
                             } else {
                                 btn = "<button class='btn btn-primary unduh'  data-id='" + btn + "'>Kerjakan</button>";
 
@@ -353,6 +354,15 @@
                             setTimeout(function () {
                                 console.log(id)
                                 location.href = "#/ujian/" + id;
+                            }, 1000);
+                        })
+                        table.on("click", ".unduh_jawaban", function () {
+                            console.log("Unduh Jawaban");
+                            toastr.success("Tunggu anda akan di alihkan ");
+                            let id = $(this).data("id");
+                            setTimeout(function () {
+                                console.log(id)
+                                location.href = url + "api/download_jawaban/" + info.nis + "?nis=" + info.nis + "&password=" + info.password;
                             }, 1000);
                         })
                     });
