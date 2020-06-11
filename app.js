@@ -89,6 +89,7 @@
                     '<div class="funkyradio-primary">',
                     '<input id="e' + d[i].id + '" type="radio" value="E" name="' + name + '">',
                     '<label  for="e' + d[i].id + '"> ' + pg_e + '</label>',
+                    '<input type="radio" name="'+name+'" value="X" hidden checked>',
                     '</div>',
                 ];
                 temp += '<div class="card m-2"><div class="m-4">' + abc.join("") + '</div></div>';
