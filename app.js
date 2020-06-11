@@ -329,8 +329,8 @@
                             let btn = $(i[5]).data("id");
                             if (i[4] == "Sudah") {
 
-                                btn = "<button class='btn btn-primary ' disabled data-id='" + btn + "'>Kerjakan</button>";
-                                btn += "<button class='btn btn-primary unduh_jawaban' data-id='" + btn + "'>Unduh Jawaban</button>";
+                                btn = "<button class='btn btn-primary m-2' disabled data-id='" + btn + "'>Kerjakan</button>";
+                                btn += "<button class='btn btn-primary unduh_jawaban m-2' data-id='" + btn + "'>Unduh Jawaban</button>";
                             } else {
                                 btn = "<button class='btn btn-primary unduh'  data-id='" + btn + "'>Kerjakan</button>";
 
