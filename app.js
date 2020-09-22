@@ -70,6 +70,7 @@
                 pg_e = "<div class='text ml-3'>" + d[i].pg_e + "</div>";
                 temp = '<div class="card m-2"><div class="m-4">' + d[i].soal + '</div></div>';
                 let abc = [];
+                console.log($d[i]);
                 if(d[i].pg_d === null && d[i].pg_e === null){
                     abc = [
                         '<div class="funkyradio-primary">',
