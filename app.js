@@ -69,29 +69,48 @@
                 pg_d = "<div class='text ml-3'>" + d[i].pg_d + "</div>";
                 pg_e = "<div class='text ml-3'>" + d[i].pg_e + "</div>";
                 temp = '<div class="card m-2"><div class="m-4">' + d[i].soal + '</div></div>';
-                let abc = [
-                    '<div class="funkyradio-primary">',
-                    '<input  type="radio" id="a' + d[i].id + '" value="A" name="' + name + '">',
-                    '<label for="a' + d[i].id + '">' + pg_a + '</label>',
-                    '</div>',
-                    '<div class="funkyradio-primary">',
-                    '<input id="b' + d[i].id + '" type="radio" value="B" name="' + name + '">',
-                    '<label for="b' + d[i].id + '">' + pg_b + '</label>',
-                    '</div>',
-                    '<div class="funkyradio-primary">',
-                    '<input id="c' + d[i].id + '" type="radio" value="C" name="' + name + '">',
-                    '<label  for="c' + d[i].id + '">' + pg_c + '</label>',
-                    '</div>',
-                    '<div class="funkyradio-primary">',
-                    '<input id="d' + d[i].id + '" type="radio" value="D" name="' + name + '">',
-                    '<label for="d' + d[i].id + '">  ' + pg_d + '</label>',
-                    '</div>',
-                    '<div class="funkyradio-primary">',
-                    '<input id="e' + d[i].id + '" type="radio" value="E" name="' + name + '">',
-                    '<label  for="e' + d[i].id + '"> ' + pg_e + '</label>',
-                    '<input type="radio" name="'+name+'" value="X" hidden checked>',
-                    '</div>',
-                ];
+                if(d[i].pg_d === NULL && d[i].pg_e === NULL){
+                    let abc = [
+                        '<div class="funkyradio-primary">',
+                        '<input  type="radio" id="a' + d[i].id + '" value="A" name="' + name + '">',
+                        '<label for="a' + d[i].id + '">' + pg_a + '</label>',
+                        '</div>',
+                        '<div class="funkyradio-primary">',
+                        '<input id="b' + d[i].id + '" type="radio" value="B" name="' + name + '">',
+                        '<label for="b' + d[i].id + '">' + pg_b + '</label>',
+                        '</div>',
+                        '<div class="funkyradio-primary">',
+                        '<input id="c' + d[i].id + '" type="radio" value="C" name="' + name + '">',
+                        '<label  for="c' + d[i].id + '">' + pg_c + '</label>',
+                        '</div>',
+                        '<input type="radio" name="'+name+'" value="X" hidden checked>',
+                        '</div>',
+                    ];
+                }else {
+                    let abc = [
+                        '<div class="funkyradio-primary">',
+                        '<input  type="radio" id="a' + d[i].id + '" value="A" name="' + name + '">',
+                        '<label for="a' + d[i].id + '">' + pg_a + '</label>',
+                        '</div>',
+                        '<div class="funkyradio-primary">',
+                        '<input id="b' + d[i].id + '" type="radio" value="B" name="' + name + '">',
+                        '<label for="b' + d[i].id + '">' + pg_b + '</label>',
+                        '</div>',
+                        '<div class="funkyradio-primary">',
+                        '<input id="c' + d[i].id + '" type="radio" value="C" name="' + name + '">',
+                        '<label  for="c' + d[i].id + '">' + pg_c + '</label>',
+                        '</div>',
+                        '<div class="funkyradio-primary">',
+                        '<input id="d' + d[i].id + '" type="radio" value="D" name="' + name + '">',
+                        '<label for="d' + d[i].id + '">  ' + pg_d + '</label>',
+                        '</div>',
+                        '<div class="funkyradio-primary">',
+                        '<input id="e' + d[i].id + '" type="radio" value="E" name="' + name + '">',
+                        '<label  for="e' + d[i].id + '"> ' + pg_e + '</label>',
+                        '<input type="radio" name="'+name+'" value="X" hidden checked>',
+                        '</div>',
+                    ];
+                }
                 temp += '<div class="card m-2"><div class="m-4">' + abc.join("") + '</div></div>';
                 build = [
                     "<div class='row'>",
