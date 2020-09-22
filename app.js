@@ -69,8 +69,9 @@
                 pg_d = "<div class='text ml-3'>" + d[i].pg_d + "</div>";
                 pg_e = "<div class='text ml-3'>" + d[i].pg_e + "</div>";
                 temp = '<div class="card m-2"><div class="m-4">' + d[i].soal + '</div></div>';
+                let abc = [];
                 if(d[i].pg_d === null && d[i].pg_e === null){
-                    let abc = [
+                    abc = [
                         '<div class="funkyradio-primary">',
                         '<input  type="radio" id="a' + d[i].id + '" value="A" name="' + name + '">',
                         '<label for="a' + d[i].id + '">' + pg_a + '</label>',
@@ -87,7 +88,7 @@
                         '</div>',
                     ];
                 }else {
-                    let abc = [
+                    abc = [
                         '<div class="funkyradio-primary">',
                         '<input  type="radio" id="a' + d[i].id + '" value="A" name="' + name + '">',
                         '<label for="a' + d[i].id + '">' + pg_a + '</label>',
@@ -111,6 +112,7 @@
                         '</div>',
                     ];
                 }
+                console.log(abc);
                 temp += '<div class="card m-2"><div class="m-4">' + abc.join("") + '</div></div>';
                 build = [
                     "<div class='row'>",
