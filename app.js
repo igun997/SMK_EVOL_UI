@@ -69,7 +69,7 @@
                 pg_d = "<div class='text ml-3'>" + d[i].pg_d + "</div>";
                 pg_e = "<div class='text ml-3'>" + d[i].pg_e + "</div>";
                 temp = '<div class="card m-2"><div class="m-4">' + d[i].soal + '</div></div>';
-                if(d[i].pg_d === NULL && d[i].pg_e === NULL){
+                if(d[i].pg_d === null && d[i].pg_e === null){
                     let abc = [
                         '<div class="funkyradio-primary">',
                         '<input  type="radio" id="a' + d[i].id + '" value="A" name="' + name + '">',
