@@ -1,2 +1,2 @@
-var url = "https://learning.smkkesehatanrajawali.sch.id/";
+let url = "http://127.0.0.1:8000/";
 // Endpoint API

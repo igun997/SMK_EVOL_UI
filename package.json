@@ -1,0 +1,25 @@
+{
+  "name": "smk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "sirv": "^1.0.10",
+    "sirv-cli": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "sirv ./ --single",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igun997/SMK_EVOL_UI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/igun997/SMK_EVOL_UI/issues"
+  },
+  "homepage": "https://github.com/igun997/SMK_EVOL_UI#readme"
+}
