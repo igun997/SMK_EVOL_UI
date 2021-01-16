@@ -360,6 +360,9 @@
                                 let btn = [
                                     "<button data-id='"+i.id+"' class='btn btn-primary btn-flat m-1 link_jitsi' type='button'><li class='fa fa-handshake'></li></button>",
                                 ];
+                                btn.push(
+                                    "<a href='"+i.downloadable+"' class='btn btn-success btn-flat m-1' >Materi</a>"
+                                );
                                 if(i.present_status_id !== null){
                                     if (i.present_status_id == 4){
                                         btn.push(
@@ -373,9 +376,7 @@
                                         );
                                     }
 
-                                    btn.push(
-                                        "<a href='"+i.downloadable+"' class='btn btn-success btn-flat m-1' >Materi</a>"
-                                    );
+
 
                                 }
                                 table.append(([
