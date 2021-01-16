@@ -373,6 +373,10 @@
                                         );
                                     }
 
+                                    btn.push(
+                                        "<a href='"+i.link+"' class='btn btn-success btn-flat m-1' >Materi</a>"
+                                    );
+
                                 }
                                 table.append(([
                                     "<tr>",
