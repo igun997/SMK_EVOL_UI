@@ -68,7 +68,7 @@
                 pg_c = "<div class='text ml-3'>" + d[i].pg_c + "</div>";
                 pg_d = "<div class='text ml-3'>" + d[i].pg_d + "</div>";
                 pg_e = "<div class='text ml-3'>" + d[i].pg_e + "</div>";
-                temp = '<div class="card m-2"><div class="m-4">' + d[i].soal + '</div></div>';
+                temp = '<div class="card m-2"><div class="m-4">'+(i+1)+". "+ d[i].soal + '</div></div>';
                 let abc = [];
                 console.log(d[i]);
                 if(d[i].pg_d === null && d[i].pg_e === null){
