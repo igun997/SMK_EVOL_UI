@@ -418,7 +418,7 @@
                                     let data = await r.json();
                                     if(data.status == 1){
                                         window.open(
-                                            data.link+"#userInfo.displayName="+info.nama,
+                                            data.link+'#userInfo.displayName="'+info.nama+'"',
                                             "_blank"
                                         )
                                         $("#kelas_reload").trigger("click");
