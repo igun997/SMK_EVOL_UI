@@ -441,6 +441,102 @@
                 }, 100);
             });
         });
+        this.get("/#/raport", function (context) {
+            context.app.swap('');
+            h = context.render("pages/raport.html", {}).appendTo(context.$element());
+            $.getScript('./config.js', function () {
+                setTimeout(function () {
+                    const table = $("#kelas_konten");
+                    const info = JSON.parse(localStorage.getItem("info"));
+                    console.log(info)
+                    const reload = ()=>{
+                        fetch(url+"/api/vclass/"+info.nis+"?nis="+info.nis+"&password="+info.password+"").then(async r=> {
+
+                            const kelas = await r.json();
+                            if (kelas.data.length > 0) {
+                                table.html("");
+                            }
+
+                            kelas.data.forEach((i, k) => {
+                                let btn = [
+                                    "<button data-id='"+i.id+"' class='btn btn-primary btn-flat m-1 link_jitsi' type='button'><li class='fa fa-handshake'></li></button>",
+                                ];
+                                btn.push(
+                                    "<a href='"+i.downloadable+"' class='btn btn-success btn-flat m-1' >Materi</a>"
+                                );
+                                if(i.present_status_id !== null){
+                                    if (i.present_status_id == 4){
+                                        btn.push(
+                                            "<button data-id='"+i.id+"' data-status='1' class='btn btn-danger btn-flat m-1 present' type='button'>Hadir</button>"
+                                        );
+                                        btn.push(
+                                            "<button data-id='"+i.id+"' data-status='2' class='btn btn-danger btn-flat m-1 present' type='button'>Ijin</button>"
+                                        );
+                                        btn.push(
+                                            "<button data-id='"+i.id+"' data-status='3' class='btn btn-danger btn-flat m-1 present' type='button'>Sakit</button>"
+                                        );
+                                    }
+
+
+
+                                }
+                                table.append(([
+                                    "<tr>",
+                                    "<td>" + (k+1) + "</td>",
+                                    "<td>" + i.name + "</td>",
+                                    "<td>" + i.start_date + "</td>",
+                                    "<td>" + i.end_date + "</td>",
+                                    "<td>" + i.status_text + "</td>",
+                                    "<td>"+btn.join("")+"</td>",
+                                    "</tr>",
+                                ]).join(""));
+                            });
+                            table.find(".present").on("click",async function (){
+                                let id = $(this).data("id");
+                                let status = $(this).data("status");
+                                let pin =  prompt("Masukan PIN Presensi Kamu ");
+                                if(pin){
+                                    let path = url+"api/vclass_present/?nis="+info.nis+"&password="+info.password+"&id="+id+"&status="+status+"&pin="+pin;
+                                    fetch(path,{method:"POST",headers:{"Accept":"application/json"},body:JSON.stringify({pin:pin})}).then(async r=> {
+                                        const {status,data} = await r.json();
+                                        console.log("Status = ",status);
+                                        console.log("Status = ",data);
+                                        if (status == 1){
+                                            toastr.info("Data Presensi Telah Di Simpan");
+                                            $("#kelas_reload").trigger("click");
+                                        }else{
+                                            toastr.error("PIN Presensi Salah");
+                                        }
+
+                                    });
+                                }
+                            })
+                            table.find(".link_jitsi").on("click",async function () {
+                                let id = $(this).data("id");
+                                let path = url + "api/vclass_detail/" + id + "?nis=" + info.nis + "&nis_siswa=" + info.nis + "&password=" + info.password;
+                                console.log(path)
+                                fetch(path,{method:"GET",headers:{"Accept":"application/json"}}).then(async r=> {
+                                    let data = await r.json();
+                                    if(data.status == 1){
+                                        window.open(
+                                            data.link+'#userInfo.displayName="'+info.nama+'"',
+                                            "_blank"
+                                        )
+                                        $("#kelas_reload").trigger("click");
+                                    }
+                                });
+                            });
+
+                        })
+                    }
+                    $("#kelas_reload").on("click",function (){
+                        reload();
+                    })
+                    reload();
+
+                }, 100);
+            });
+        });
         this.get("/#/ujian", function (context) {
             context.app.swap('');
             h = context.render("pages/ujian.html", {}).appendTo(context.$element());
