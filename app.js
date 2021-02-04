@@ -159,6 +159,11 @@
             "icon": "fa-table"
         },
         {
+            "name": "Raport",
+            "link": "#/raport",
+            "icon": "fa-table"
+        },
+        {
             "name": "Logout",
             "link": "#/logout",
             "icon": "fa-sign-out-alt"
